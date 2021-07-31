@@ -1,0 +1,28 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "brcm,bcm2835";
+
+        fragment@0 {
+                target = <&i2c_arm>;
+                __overlay__ {
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        status = "okay";
+                        clock-frequency = <400000>;
+
+                        mpu9255: mpu9255@68 {
+                                compatible = "invensense,mpu9255";
+                                reg = <0x68>;
+                                interrupt-parent = <&gpio>;
+                                interrupts = <4 1>;
+                        };
+                };
+        };
+
+        __overrides__ {
+                interrupt = <&mpu9255>,"interrupts:0";
+                addr = <&mpu9255>,"reg:0";
+        };
+};
